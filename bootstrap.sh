@@ -105,7 +105,7 @@ install_dependencies_centos() {
       python3-pip
       python3-firewall
     )
-  else 
+  else
     REQUIRED_PACKAGES+=(
       python39
       python39-setuptools
@@ -133,7 +133,7 @@ if [ -d "$HOME/ansible-easy-vpn" ]; then
   git pull
   popd
 else
-  git clone https://github.com/ioplker/ansible-easy-vpn $HOME/ansible-easy-vpn
+  git clone -b without-ssh-hardening https://github.com/ioplker/ansible-easy-vpn $HOME/ansible-easy-vpn
 fi
 
 # Set up a Python venv
@@ -295,7 +295,7 @@ else
     echo "Make sure that you answer with either 1, 2 or 3"
     read -p "DNS [1]: " dns_number
   done
-    case $dns_number in 
+    case $dns_number in
       "2")
         dns_nameservers="quad9"
         ;;
@@ -389,7 +389,7 @@ chmod 600 $HOME/ansible-easy-vpn/secret.yml
 
 if [ -z ${email_password+x} ]; then
   echo
-else 
+else
   echo "email_password: \"${email_password}\"" >> $HOME/ansible-easy-vpn/secret.yml
 fi
 

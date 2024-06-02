@@ -45,27 +45,6 @@
     group: "{{ username }}"
     mode: 0600
 
-- name: Update SSH configuration to be more secure
-  register: ssh_config
-  ansible.builtin.lineinfile:
-    dest: "/etc/ssh/sshd_config"
-    regexp: "{{ item.regexp }}"
-    line: "{{ item.line }}"
-    state: present
-    validate: "sshd -T -f %s"
-    mode: 0644
-  with_items:
-    - regexp: "^#?PasswordAuthentication"
-      line: "PasswordAuthentication no"
-    - regexp: "^#?PermitRootLogin"
-      line: "PermitRootLogin no"
-    - regexp: "^#?Port"
-      line: "Port {{ ssh_port }}"
-    - regexp: "^#?PermitEmptyPasswords"
-      line: "PermitEmptyPasswords no"
-    - regexp: "^#?X11Forwarding"
-      line: "X11Forwarding no"
-
 - name: Notify user about changes
-  when: (ssh_config.changed or ssh_authorized_keys.changed)
+  when: ssh_authorized_keys.changed
   ansible.builtin.import_tasks: notify_user.yml
